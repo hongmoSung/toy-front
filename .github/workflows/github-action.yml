@@ -19,6 +19,13 @@ jobs:
       - name: Build
         run: yarn build
         
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: name/app
+
+        
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         
@@ -36,4 +43,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/toy-front:${{ github.run_number }}
+#           tags: ${{ secrets.DOCKERHUB_USERNAME }}/toy-front:${{ github.run_number }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
