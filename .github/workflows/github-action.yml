@@ -23,10 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{github.repository}}
-          
-      - name: print
-        run : echo '${{ secrets.DOCKERHUB_USERNAME }}/${{github.repository}}'
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/toy-front
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
