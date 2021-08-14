@@ -24,6 +24,9 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/toy-front
+          tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
