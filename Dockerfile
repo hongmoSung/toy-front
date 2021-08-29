@@ -1,16 +1,24 @@
-# base image
-FROM node:12.2.0-alpine
+# pull the base image
+FROM node:lts-alpine
 
-# set working directory
+# set the working direction
 WORKDIR /app
 
-# `/app/node_modules/.bin`을 $PATH 에 추가
+# add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
-# app dependencies, install 및 caching
-COPY package.json /app/package.json
-RUN npm install
-RUN npm install react-scripts@3.0.1 -g
+# install app dependencies
+COPY package.json ./
 
-# 앱 실행
-CMD ["npm", "start"]
+COPY yarn.lock ./
+
+# rebuild node-sass
+RUN yarn add node-sass
+
+RUN yarn
+
+# add app
+COPY . ./
+
+# start app
+CMD ["yarn", "start"]
