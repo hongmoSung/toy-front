@@ -1,24 +1,10 @@
-# pull the base image
-FROM node:lts-alpine
-
-# set the working direction
-WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install app dependencies
+FROM node:alpine as builder
+WORKDIR '/usr/src/app'
 COPY package.json ./
+RUN npm install
+COPY ./ ./
+RUN npm run build
 
-COPY yarn.lock ./
-
-# rebuild node-sass
-RUN yarn add node-sass
-
-RUN yarn
-
-# add app
-COPY . ./
-
-# start app
-CMD ["yarn", "start"]
+FROM nginx
+EXPOSE 80
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
