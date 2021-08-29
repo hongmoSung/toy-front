@@ -1,11 +1,16 @@
-FROM node:alpine
+# base image
+FROM node:12.2.0-alpine
 
-WORKDIR /usr/src/app
+# set working directory
+WORKDIR /app
 
-COPY package.json ./
+# `/app/node_modules/.bin`을 $PATH 에 추가
+ENV PATH /app/node_modules/.bin:$PATH
 
+# app dependencies, install 및 caching
+COPY package.json /app/package.json
 RUN npm install
+RUN npm install react-scripts@3.0.1 -g
 
-COPY ./ ./
-
-CMD ["npm","run","start"]
+# 앱 실행
+CMD ["npm", "start"]
